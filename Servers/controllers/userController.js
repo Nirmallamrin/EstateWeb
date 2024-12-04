@@ -1,9 +1,11 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import { generateToken } from "../generateToken.js";
-import nodemailer from "nodemailer";
+
 import dotenv from "dotenv";
 dotenv.config();
+
+
 
 export const signup = async (req, res) => {
      try {
@@ -65,33 +67,5 @@ export const signin = async (req, res) => {
   }
 }
 
-export const sendEmail = async (req, res) => {
-    try {
-        const { ownerEmail, message, userName } = req.body;
 
-        const transporter = nodemailer.createTransport({
-                service: "gmail",
-                auth: {
-                  user: process.env.EMAIL,
-                  pass: process.env.EMAIL_PASSWORD,
-                },
-        });
 
-            const mailOptions = {
-              from: process.env.EMAIL,
-              to: ownerEmail,
-              subject: "Property Inquiry",
-              text: `${userName} sent the following message: ${message}`,
-            };
-        
-        transporter.sendMail(mailOptions, (err, info) => {
-                 if (err) {
-                   return res.status(500).send({ message: err.message });
-                 }
-                 console.log("Email sent: " + info.response);
-                 res.status(200).send({ message: "Email sent" });
-        });
-    } catch (error) {
-        res.status(500).send({ message: error.message });
-    }
-}

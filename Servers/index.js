@@ -4,6 +4,7 @@ import connect from "./config/db.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import userRouter from "./Routers/userRoute.js";
+import propertyRouter from "./Routers/propertRoute.js";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(cors())
 
 
 app.use("/user", userRouter)
+app.use("/property", propertyRouter);
 
 app.get("/", (req, res) => {
   res.send("Estate Web!");
