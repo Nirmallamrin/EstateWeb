@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { LoginSocialGoogle } from "reactjs-social-login";
 import { FaGoogle } from "react-icons/fa6";
+import { CgSearchLoading } from "react-icons/cg";
 
 const Signin = () => {
   const [email, setEmail] = useState("");
@@ -94,7 +95,7 @@ const Signin = () => {
               className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               disabled={loading} // Disable button during loading
             >
-              {loading ? "Signing In..." : "Sign In"}
+              {loading ?  'Loading...' : "Sign In"}
             </button>
           </div>
         </form>
