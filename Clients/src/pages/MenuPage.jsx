@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Enquiry from "../components/Enquiry";
 
 const MenuPage = () => {
   const [properties, setProperties] = useState([]);
@@ -10,6 +11,7 @@ const MenuPage = () => {
     ownerEmail: "",
   });
   const [loading, setLoading] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState(null);
 
   // Handle input changes for property form
   const handleInputChange = (e) => {
@@ -70,20 +72,21 @@ const MenuPage = () => {
     }
   };
 
-  // Send an email to the property owner
-  const sendEmail = (email, title) => {
-    const emailLink = `mailto:${email}?subject=Inquiry about ${title}&body=Hi, I am interested in your property.`;
-    window.location.href = emailLink;
-  };
 
   // Fetch properties on component mount
   useEffect(() => {
     fetchProperties();
   }, []);
 
+    const handleEnquiryClick = (property) => {
+      setSelectedProperty(property);
+    };
+
   return (
     <div className="max-w-6xl mx-auto p-6 bg-gray-100 rounded-lg shadow-lg">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Estate Manager</h1>
+      <h1 className=" justify-center flex text-3xl font-bold mb-6 text-purple-800">
+        Estate Manager
+      </h1>
 
       {/* Property Upload Form */}
       <div className="bg-white p-4 rounded-lg shadow-md mb-8">
@@ -141,37 +144,59 @@ const MenuPage = () => {
       </div>
 
       {/* Property List */}
-      <div className="bg-white p-4 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold mb-4">List of Properties</h2>
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+          Available Properties
+        </h2>
         {properties.length === 0 ? (
-          <p className="text-gray-600">No properties added yet.</p>
+          <p className="text-gray-500 text-center">
+            No properties available at the moment.
+          </p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {properties.map((property, index) => (
               <div
                 key={index}
-                className="border border-gray-300 rounded-lg overflow-hidden shadow-sm"
+                className="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300"
               >
-                <img
-                  src={property.imageUrl} // Make sure this points to the correct image URL
-                  alt={property.title}
-                  className="w-full h-40 object-cover"
-                />
-                <div className="p-4">
-                  <h3 className="text-lg font-bold">{property.title}</h3>
-                  <p className="text-gray-700 mb-2">{property.description}</p>
+                {/* Property Image */}
+                <div className="relative">
+                  <img
+                    src={property.imageUrl}
+                    alt={property.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  <span className="absolute top-2 left-2 bg-green-500 text-white text-sm px-3 py-1 rounded-full">
+                    Available
+                  </span>
+                </div>
+
+                {/* Property Details */}
+                <div className="p-4 space-y-3">
+                  <h3 className="text-lg font-bold text-gray-800">
+                    {property.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    {property.description}
+                  </p>
+
                   <button
-                    onClick={() =>
-                      sendEmail(property.ownerEmail, property.title)
-                    }
-                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                    onClick={() => handleEnquiryClick(property)}
+                    className="w-full bg-blue-500 text-white text-sm font-medium py-2 rounded hover:bg-blue-600 transition-colors"
                   >
-                    Send Enquiry
+                    Contact Owner
                   </button>
                 </div>
               </div>
             ))}
           </div>
+        )}
+
+        {selectedProperty && (
+          <Enquiry
+            property={selectedProperty}
+            onClose={() => setSelectedProperty(null)}
+          />
         )}
       </div>
     </div>
