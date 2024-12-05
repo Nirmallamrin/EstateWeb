@@ -20,11 +20,14 @@ const Signup = () => {
     }
 
     try {
-      const { data } = await axios.post("http://localhost:3000/user/signup", {
-        userName,
-        email,
-        password,
-      });
+      const { data } = await axios.post(
+        "https://estateweb-eues.onrender.com/user/signup",
+        {
+          userName,
+          email,
+          password,
+        }
+      );
 
       alert("Registration Successful");
       localStorage.setItem("userInfo", JSON.stringify(data));

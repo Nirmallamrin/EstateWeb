@@ -34,7 +34,7 @@ const MenuPage = () => {
       formData.append("ownerEmail", newProperty.ownerEmail); // Append the owner's email
 
       const response = await axios.post(
-        "http://localhost:3000/property/upload-property",
+        "https://estateweb-eues.onrender.com/property/upload-property",
         formData,
         {
           headers: {
@@ -65,7 +65,9 @@ const MenuPage = () => {
   // Fetch all properties when the component mounts
   const fetchProperties = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/property/properties");
+      const res = await axios.get(
+        "https://estateweb-eues.onrender.com/property/properties"
+      );
       setProperties(res.data); // Update the properties state with the fetched data
     } catch (error) {
       console.error("Failed to fetch properties:", error);

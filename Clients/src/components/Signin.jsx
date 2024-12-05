@@ -21,10 +21,13 @@ const submitHandler = async (e) => {
   }
 
   try {
-    const { data } = await axios.post("http://localhost:3000/user/signin", {
-      email,
-      password,
-    });
+    const { data } = await axios.post(
+      "https://estateweb-eues.onrender.com/user/signin",
+      {
+        email,
+        password,
+      }
+    );
 
     alert("Registration Successful");
     localStorage.setItem("userInfo", JSON.stringify(data));

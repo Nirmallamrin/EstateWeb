@@ -9,11 +9,14 @@ const Enquiry = ({ property, onClose }) => {
   const handleSendEnquiry = async () => {
     setLoading(true); // Start loading
     try {
-      await axios.post("http://localhost:3000/property/send-email", {
-        ownerEmail: property.ownerEmail,
-        message,
-        userName,
-      });
+      await axios.post(
+        "https://estateweb-eues.onrender.com/property/send-email",
+        {
+          ownerEmail: property.ownerEmail,
+          message,
+          userName,
+        }
+      );
       alert("Enquiry sent successfully!");
       onClose(); // Close the modal
     } catch (error) {
