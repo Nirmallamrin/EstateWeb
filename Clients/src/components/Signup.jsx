@@ -8,35 +8,47 @@ const Signup = () => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const submitHandler = async (e) => {
-    e.preventDefault(); // Prevent default form submission
+const submitHandler = async (e) => {
+  e.preventDefault(); // Prevent default form submission
 
-    if (!userName || !email || !password) {
-      alert("Please fill all the fields");
-      return;
+  if (!userName || !email || !password) {
+    alert("Please fill all the fields");
+    return;
+  }
+
+  setLoading(true); // Show loading state
+
+  try {
+    const { data } = await axios.post(
+      "https://estateweb-eues.onrender.com/user/signup",
+      {
+        userName,
+        email,
+        password,
+      }
+    );
+
+    alert("Registration Successful");
+    localStorage.setItem("userInfo", JSON.stringify(data));
+    navigate("/menu");
+  } catch (error) {
+    if (error.response && error.response.status === 400) {
+      if (error.response.data === "User already exists") {
+        alert("User already exists. Please use a different email.");
+      } else {
+        alert("An error occurred during registration. Please try again.");
+      }
+    } else {
+      alert("An unexpected error occurred. Please try again later.");
     }
+    console.error(error); // Log the error for debugging
+    setLoading(false); // Hide loading state on error
+  }
+};
 
-    try {
-      const { data } = await axios.post(
-        "https://estateweb-eues.onrender.com/user/signup",
-        {
-          userName,
-          email,
-          password,
-        }
-      );
-
-      alert("Registration Successful");
-      localStorage.setItem("userInfo", JSON.stringify(data));
-      navigate("/menu");
-    } catch (error) {
-      alert("An error occurred during registration");
-      console.error(error); // Log the error for debugging
-    }
-  };
 
   return (
     <div className="flex items-center justify-center  bg-gray-100">
@@ -102,10 +114,11 @@ const Signup = () => {
           {/* Submit Button */}
           <div>
             <button
+              disabled={loading}
               type="submit"
               className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
-              Sign Up
+              {loading ? "Signing Up..." : "Sign Up"}
             </button>
           </div>
         </form>
@@ -113,7 +126,7 @@ const Signup = () => {
           client_id="109894098659-6j52ghhbkjdkth1hrq6f8oa2747nme4k.apps.googleusercontent.com"
           access_type="offline"
           onResolve={({ provider, data }) => {
-            console.log("Google Login Success:", data)
+            console.log("Google Login Success:", data);
             // Handle user data here (e.g., send token to backend or store it)
             localStorage.setItem("userInfo", JSON.stringify(data));
             navigate("/menu"); // Redirect after successful login

@@ -6,7 +6,7 @@ const HomePage = () => {
   const [showSignup, setShowSignup] = useState(true); // State to toggle between Signup and Signin
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className="bg-custom-image bg-cover bg-center flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg p-6 w-11/12 max-w-md">
         <h1 className="text-2xl font-bold text-center mb-4 text-purple-800">
           Estate Website
